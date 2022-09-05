@@ -1,0 +1,89 @@
+import torch
+from constants import *
+from tqdm import tqdm
+from numpy import vstack
+from numpy import sqrt
+from pandas import read_csv
+from sklearn.metrics import mean_squared_error
+from torch.utils.data import Dataset
+from torch.utils.data import DataLoader
+from torch.utils.data import random_split
+from torch import Tensor
+from torch.nn import Linear
+from torch.nn import ReLU
+from torch.nn import Module
+from torch.optim import SGD, Adam
+from torch.nn import MSELoss
+from torch.nn.init import xavier_uniform_
+from constants import *
+from torch import nn
+import numpy as np
+
+
+
+class NeuralNetwork(nn.Module):
+    def __init__(self, in_dim=3, out_dim=linear_output_dim):
+        super(NeuralNetwork, self).__init__()
+        #self.flatten = nn.Flatten()
+        self.linear_relu_stack = nn.Sequential(
+            nn.Linear(in_dim, in_dim),
+            nn.BatchNorm1d(in_dim),
+            nn.Dropout(0.3),
+            nn.ReLU(),
+            nn.Linear(in_dim, in_dim),
+            nn.BatchNorm1d(in_dim),
+            nn.Dropout(0.3),
+            nn.Linear(in_dim, out_dim),
+        )
+
+    def forward(self, x):
+        #x = torch.flatten(x)
+        logits = self.linear_relu_stack(x)
+        return logits
+
+def train_model(train_loader, model):
+    criterion = MSELoss()
+    #optimizer = SGD(model.parameters(), lr=linear_lr_rate,
+                    #momentum=linear_momentum)
+    optimizer = Adam(model.parameters(), lr=0.05)
+    model.train()
+    for epoch in range(3):
+        for inputs, targets in tqdm(train_loader):
+            optimizer.zero_grad()
+            yhat = model(inputs)
+            assert not torch.isnan(yhat).any()
+            loss = criterion(yhat, targets)
+            loss.backward()
+            optimizer.step()
+
+
+def evaluate_model(test_loader, model):
+    predictions = []
+    actuals = []
+    model.eval()
+    for inputs, targets in tqdm(test_loader):
+        yhat = model(inputs)
+        yhat = yhat.detach().numpy()
+        assert not np.isnan(yhat).any()
+        actual = targets.numpy()
+        actual = actual.reshape((len(actual), 1))
+        predictions.append(yhat)
+        actuals.append(actual)
+
+    predictions, actuals = vstack(predictions), vstack(actuals)
+
+    mse = mean_squared_error(actuals, predictions)
+    return mse
+
+
+def bio_age_nn(train_loader, test_loader, in_dim, out_dim):
+    model = NeuralNetwork(in_dim, out_dim)
+    train_model(train_loader, model)
+    mse = evaluate_model(test_loader, model)
+
+    print('MSE: %.3f, RMSE: %.3f' % (mse, sqrt(mse)))
+    # row = [0.00632, 18.00, 2.310, 0, 0.5380, 6.5750,
+    #        65.20, 4.0900, 1, 296.0, 15.30]
+    # yhat = predict(row, model)
+    # print('Predicted: %.3f' % yhat)
+    return model
