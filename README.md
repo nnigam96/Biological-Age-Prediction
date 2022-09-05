@@ -1,4 +1,4 @@
-# 760 Project
+# Biological Age Prediction
 In this project, we propose a prediction ML model which predicts medical outcomes (e.g. Death and
 Biological Age) of a patient. We utilize the provided datasets related to Opportunistic Cardiometabolic
 Screening (CT Data and Clinical Data ) to train our model and predict certain medical outcomes with
