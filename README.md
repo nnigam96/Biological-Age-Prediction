@@ -1,32 +1,98 @@
 # Biological Age Prediction
-In this project, we propose a prediction ML model which predicts medical outcomes (e.g. Death and
-Biological Age) of a patient. We utilize the provided datasets related to Opportunistic Cardiometabolic
-Screening (CT Data and Clinical Data ) to train our model and predict certain medical outcomes with
-a low error and high accuracy
 
-## Install
+A machine learning framework for predicting medical outcomes including biological age and mortality risk using Opportunistic Cardiometabolic Screening data. This project combines CT imaging data with clinical variables to build predictive models for healthcare applications.
+
+## Problem Statement
+
+Chronological age doesn't always reflect an individual's true physiological state. **Biological age**—a measure of how "old" a person's body functions—can differ significantly from chronological age and is a better predictor of health outcomes. This project addresses:
+
+- **Biological Age Estimation**: Predicting physiological age from medical imaging and clinical data
+- **Mortality Risk Prediction**: Forecasting death outcomes using multi-modal health data
+- **Multi-Modal Learning**: Combining CT imaging features with clinical variables for improved accuracy
+
+## Features
+
+- **Multi-Modal Input**: Integrates CT scan data with clinical variables
+- **Multiple Prediction Tasks**: 
+  - Biological age regression
+  - Mortality risk classification
+  - Additional medical outcome predictions
+- **Neural Network Architectures**: Custom models for different prediction tasks
+- **Data Augmentation**: Enhanced training data for improved model generalization
+- **Comprehensive Evaluation**: Low error and high accuracy metrics
+
+## Project Structure
 
 ```
-python3 -m venv 760
-source ./760/bin/activate
-which pip
+Biological-Age-Prediction/
+├── Train Src/              # Training scripts for different tasks
+│   ├── part1.py           # Task 1: Biological age prediction
+│   ├── part2.py           # Task 2: Additional outcome prediction
+│   └── part3.py           # Task 3: Mortality/death prediction
+├── Age_Vs_BioAge.py       # Analysis and visualization
+├── bio_age_nn.py          # Neural network for biological age
+├── data/                  # Dataset files (CT and clinical data)
+├── models/                # Saved model checkpoints
+└── requirements.txt       # Python dependencies
+```
+
+## Technical Details
+
+### Data Sources
+
+- **CT Imaging Data**: Opportunistic Cardiometabolic Screening CT scans
+- **Clinical Variables**: Patient demographics, lab values, and health metrics
+- **Outcomes**: Biological age, mortality indicators, and other medical endpoints
+
+### Model Architecture
+
+- **Neural Networks**: Custom architectures for regression and classification
+- **Feature Engineering**: Extraction of relevant features from CT and clinical data
+- **Data Preprocessing**: Normalization, augmentation, and train/test splitting
+
+## Quick Start
+
+### Installation
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### Training
 
-## Train
-Training models for the 3 problems have been divided as part1, part2 and part3 corresponding to each problem posited in the project. All files are in "Train Src"
+Training is divided into three parts corresponding to different prediction tasks:
 
-```
-which python
+```bash
 cd "Train Src"
-python part1.py
-python part2.py
-python part3.py
+python part1.py  # Biological age prediction
+python part2.py  # Additional medical outcome
+python part3.py  # Mortality/death prediction
 ```
 
-## Demo
-The driver code can be used to run 2 examples with CT data drawn from the given sample
+### Demo
+
+Run the driver script to test on sample CT data:
+
+```bash
+python Age_Vs_BioAge.py
 ```
-python Driver.py 
-```
+
+## Results
+
+The models achieve:
+- **Low Error**: Accurate biological age predictions
+- **High Accuracy**: Reliable classification of medical outcomes
+- **Clinical Relevance**: Predictions that can inform healthcare decisions
+
+## Applications
+
+- **Preventive Medicine**: Identifying patients at higher biological age
+- **Risk Stratification**: Assessing mortality and health risks
+- **Research**: Understanding factors that influence biological aging
+
+## License
+
+See repository for license information.
+
